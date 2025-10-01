@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ -f .cursorrules ])",
+      "Bash([ -d .cursor/rules ])",
+      "Bash([ -f .github/copilot-instructions.md ])",
+      "Bash(then echo \"found\")",
+      "Bash(fi)",
+      "Bash(git init:*)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

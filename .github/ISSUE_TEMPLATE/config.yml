@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Parent Library (fortran-s3-accessor)
+    url: https://github.com/pgierz/fortran-s3-accessor/issues
+    about: For issues with the underlying S3 library, please report them in the parent repository
+  - name: NetCDF-Fortran Issues
+    url: https://github.com/Unidata/netcdf-fortran/issues
+    about: For issues with NetCDF itself (not S3 integration), report to the NetCDF-Fortran project
+  - name: Discussions
+    url: https://github.com/pgierz/fortran-s3-netcdf/discussions
+    about: Ask questions, share ideas, or discuss the project

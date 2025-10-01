@@ -1,0 +1,33 @@
+name = "fortran-s3-netcdf"
+version = "0.1.0"
+license = "MIT"
+author = "Paul Gierz"
+maintainer = "pgierz@awi.de"
+copyright = "Copyright 2025, Paul Gierz"
+homepage = "https://github.com/pgierz/fortran-s3-netcdf"
+description = "NetCDF integration for fortran-s3-accessor - transparent S3 URIs with automatic cleanup"
+categories = ["io", "cloud", "scientific-computing", "netcdf"]
+keywords = ["s3", "netcdf", "climate", "earth-science", "hpc"]
+
+[build]
+auto-executables = true
+auto-tests = false
+auto-examples = false
+module-naming = false
+
+[dependencies]
+# Core S3 library - when moved to separate repo, use:
+# fortran-s3-accessor = { git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.0.1" }
+# For now (nested in parent repo):
+fortran-s3-accessor = { path = "../.." }
+
+# NetCDF Fortran interface
+netcdf-fortran = { git = "https://github.com/LKedward/netcdf-interfaces.git" }
+
+[[executable]]
+name = "s3_netcdf_example"
+source-dir = "app"
+main = "s3_netcdf_example.f90"
+
+[install]
+library = true

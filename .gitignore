@@ -1,0 +1,33 @@
+# FPM build artifacts
+build/
+*.mod
+*.o
+*.smod
+
+# Executables
+*.exe
+*.out
+s3_netcdf_example
+
+# Temporary files
+*.tmp
+*.swp
+*~
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Generated documentation
+doc/
+
+# Test artifacts
+test_output/
+*.log
+
+# Platform specific
+/dev/shm/s3_netcdf_*
+/tmp/s3_netcdf_*
+/tmp/s3_pid.tmp

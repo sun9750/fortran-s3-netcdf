@@ -1,0 +1,106 @@
+name: Documentation Improvement
+description: Suggest improvements to documentation
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Clear docs are essential for adoption.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What kind of documentation needs improvement?
+      options:
+        - API Reference
+        - README
+        - Getting Started Guide
+        - Examples
+        - Code Comments
+        - Architecture Documentation
+        - Performance Guidelines
+        - Troubleshooting
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Current Issue
+      description: What's unclear, missing, or incorrect in the current documentation?
+      placeholder: |
+        The documentation for s3_nf90_open() doesn't explain...
+        There's no example showing how to...
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Where is this documentation located?
+      placeholder: "README.md line 42, or src/s3_netcdf.f90:95"
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+      placeholder: |
+        Add a section explaining...
+        Include an example that shows...
+        Clarify that...
+    validations:
+      required: true
+
+  - type: textarea
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit from this improvement?
+      placeholder: New users trying to..., Experienced users who need to...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this improvement?
+      options:
+        - High - Critical information missing
+        - Medium - Would significantly improve clarity
+        - Low - Minor improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: draft
+    attributes:
+      label: Draft Content (Optional)
+      description: If you have suggested text, provide it here
+      placeholder: |
+        ```fortran
+        ! Example showing...
+        ```
+
+        Or suggested prose...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission Checks
+      options:
+        - label: I've checked the latest documentation
+          required: true
+        - label: I've searched for existing documentation issues
+          required: true
+        - label: I'm willing to submit a PR with documentation changes
+          required: false
