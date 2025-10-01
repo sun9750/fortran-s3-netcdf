@@ -25,7 +25,7 @@ fpm build --profile release
 
 ### Dependencies
 
-- **fortran-s3-accessor**: Currently uses path dependency `{ path = "../.." }` (nested in parent repo). When moved to standalone repo, update to: `{ git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.0" }`
+- **fortran-s3-accessor**: Uses git dependency `{ git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.0" }`
 - **netcdf-fortran**: Uses LKedward's interface wrapper `{ git = "https://github.com/LKedward/netcdf-interfaces.git" }`
 
 ## Architecture
@@ -121,12 +121,15 @@ status = s3_nf90_close(ncid)  ! Cleanup happens here
 
 ## Repository Status
 
-**Current state**: Not yet a git repository. Still nested in `fortran-s3-accessor` parent repo.
+**Current state**: Standalone git repository at `https://github.com/pgierz/fortran-s3-netcdf`
 
-**Planned migration**:
-- Will be moved to standalone repo: `https://github.com/pgierz/fortran-s3-netcdf`
+**Completed migration**:
+- ✅ Moved to standalone repository
+- ✅ Git dependency on fortran-s3-accessor v1.1.0
+- ✅ Issue templates and PR template
+- ✅ Project milestones (v0.1.0, v0.2.0, v1.0.0)
+- ✅ Comprehensive issue tracking for all planned features
 - Parent library keeps minimal example (`examples/netcdf_minimal.f90`) for CI demonstration
-- This full wrapper becomes independent package
 
 ## Related Work
 

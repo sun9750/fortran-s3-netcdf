@@ -1,5 +1,10 @@
 # fortran-s3-netcdf
 
+[![GitHub release](https://img.shields.io/github/v/release/pgierz/fortran-s3-netcdf?include_prereleases)](https://github.com/pgierz/fortran-s3-netcdf/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Fortran](https://img.shields.io/badge/Fortran-2008-734f96.svg)](https://fortran-lang.org/)
+[![FPM](https://img.shields.io/badge/FPM-package-blueviolet)](https://fpm.fortran-lang.org/)
+
 NetCDF integration for `fortran-s3-accessor` - provides transparent S3 URIs with automatic cleanup and optimal temp file management.
 
 ## Features
@@ -51,7 +56,8 @@ fortran-s3-netcdf = "0.1.0"
 ### From Source
 
 ```bash
-cd applications/fortran-s3-netcdf
+git clone https://github.com/pgierz/fortran-s3-netcdf.git
+cd fortran-s3-netcdf
 fpm build
 fpm run s3_netcdf_example
 ```

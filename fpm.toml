@@ -16,10 +16,8 @@ auto-examples = false
 module-naming = false
 
 [dependencies]
-# Core S3 library - when moved to separate repo, use:
-# fortran-s3-accessor = { git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.0.1" }
-# For now (nested in parent repo):
-fortran-s3-accessor = { path = "../.." }
+# Core S3 library
+fortran-s3-accessor = { git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.0" }
 
 # NetCDF Fortran interface
 netcdf-fortran = { git = "https://github.com/LKedward/netcdf-interfaces.git" }
