@@ -1,5 +1,6 @@
 # fortran-s3-netcdf
 
+[![CI](https://github.com/pgierz/fortran-s3-netcdf/actions/workflows/ci.yml/badge.svg)](https://github.com/pgierz/fortran-s3-netcdf/actions/workflows/ci.yml)
 [![GitHub release](https://img.shields.io/github/v/release/pgierz/fortran-s3-netcdf?include_prereleases)](https://github.com/pgierz/fortran-s3-netcdf/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Fortran](https://img.shields.io/badge/Fortran-2008-734f96.svg)](https://fortran-lang.org/)

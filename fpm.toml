@@ -11,16 +11,23 @@ keywords = ["s3", "netcdf", "climate", "earth-science", "hpc"]
 
 [build]
 auto-executables = true
-auto-tests = false
+auto-tests = true
 auto-examples = false
 module-naming = false
+external-modules = ["netcdf"]
+link = ["netcdff"]
 
 [dependencies]
 # Core S3 library
 fortran-s3-accessor = { git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.0" }
 
-# NetCDF Fortran interface
-netcdf-fortran = { git = "https://github.com/LKedward/netcdf-interfaces.git" }
+# Fortran stdlib for string utilities (metapackage in FPM 0.9.0+)
+stdlib = "*"
+
+# Note: NetCDF Fortran uses system-installed library (linked via [build] section above)
+
+[dev-dependencies]
+test-drive = { git = "https://github.com/fortran-lang/test-drive.git" }
 
 [[executable]]
 name = "s3_netcdf_example"

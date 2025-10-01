@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - 'feature/**'
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        gcc-version: [11, 12, 13]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NetCDF
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnetcdf-dev libnetcdff-dev
+
+      - name: Setup Fortran
+        uses: fortran-lang/setup-fortran@v1
+        with:
+          compiler: gcc
+          version: ${{ matrix.gcc-version }}
+
+      - name: Setup FPM
+        uses: fortran-lang/setup-fpm@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache FPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ~/.fpm
+          key: ${{ runner.os }}-fpm-${{ matrix.gcc-version }}-${{ hashFiles('fpm.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-fpm-${{ matrix.gcc-version }}-
+            ${{ runner.os }}-fpm-
+
+      - name: Build with FPM
+        run: fpm build --flag "$(nf-config --fflags)" --verbose
+
+      - name: Run example with real S3 data (continue on error)
+        run: |
+          # This downloads real ESGF climate data from public S3 bucket
+          # Allow failure since it depends on external service availability
+          fpm run s3_netcdf_example --flag "$(nf-config --fflags)" --verbose || echo "Example failed but continuing..."
+        continue-on-error: true
+
+      - name: Check for temp file cleanup
+        if: runner.os == 'Linux'
+        run: |
+          echo "Checking for leftover temp files..."
+          if ls /dev/shm/s3_netcdf_* 2>/dev/null; then
+            echo "Warning: Temp files found in /dev/shm"
+            ls -lh /dev/shm/s3_netcdf_*
+          else
+            echo "OK: No temp files found in /dev/shm"
+          fi
+          if ls /tmp/s3_netcdf_* 2>/dev/null; then
+            echo "Warning: Temp files found in /tmp"
+            ls -lh /tmp/s3_netcdf_*
+          else
+            echo "OK: No temp files found in /tmp"
+          fi
+
+  # Separate job to test with unit tests
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install NetCDF
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnetcdf-dev libnetcdff-dev
+
+      - name: Setup Fortran
+        uses: fortran-lang/setup-fortran@v1
+        with:
+          compiler: gcc
+          version: 12
+
+      - name: Setup FPM
+        uses: fortran-lang/setup-fpm@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run unit tests
+        run: fpm test --flag "$(nf-config --fflags)" --verbose
+
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          echo "Checking for TODO/FIXME comments..."
+          grep -r "TODO\|FIXME" src/ app/ || echo "No TODO/FIXME found"
+
+      - name: Check file permissions
+        run: |
+          echo "Checking for executable source files..."
+          find src app -type f -executable || echo "No executable source files found"

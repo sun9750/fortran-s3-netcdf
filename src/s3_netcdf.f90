@@ -46,6 +46,7 @@ module s3_netcdf
     use iso_fortran_env, only: int32
     use s3_http
     use netcdf
+    use stdlib_strings, only: to_string
     implicit none
     private
 
@@ -106,7 +107,7 @@ contains
         ! Download from S3 to memory
         success = s3_get_uri(uri, content)
         if (.not. success) then
-            status = NF90_ENOTFOUND
+            status = NF90_EINVAL  ! Invalid argument (S3 URI or download failed)
             return
         end if
 
@@ -131,13 +132,13 @@ contains
         call get_pid(pid)
         write(pid_str, '(I0)') pid
         temp_file = trim(temp_dir) // '/s3_netcdf_' // trim(pid_str) // '_' // &
-                    trim(int_to_str(handle_idx)) // '.nc'
+                    trim(to_string(handle_idx)) // '.nc'
 
         ! Write content to temp file
         open(newunit=unit, file=temp_file, form='unformatted', access='stream', &
              status='replace', action='write', iostat=ios)
         if (ios /= 0) then
-            status = NF90_EACCESS
+            status = NF90_EPERM  ! Permission denied (cannot create temp file)
             return
         end if
 
@@ -145,7 +146,7 @@ contains
         close(unit)
 
         if (ios /= 0) then
-            status = NF90_EWRITE
+            status = NF90_EPERM  ! Permission denied (cannot write temp file)
             return
         end if
 
@@ -273,19 +274,5 @@ contains
         close(unit, status='delete')
 
     end subroutine get_pid
-
-    !> Convert integer to string.
-    !>
-    !> @param[in] i Integer to convert
-    !> @return String representation
-    function int_to_str(i) result(str)
-        integer, intent(in) :: i
-        character(len=:), allocatable :: str
-        character(len=32) :: buffer
-
-        write(buffer, '(I0)') i
-        str = trim(buffer)
-
-    end function int_to_str
 
 end module s3_netcdf
