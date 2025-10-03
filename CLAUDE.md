@@ -2,6 +2,39 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: NetCDF Dependency Configuration ⚠️
+
+**NEVER CHANGE THE NETCDF DEPENDENCY CONFIGURATION IN fpm.toml**
+
+This project MUST use the system-installed NetCDF library, NOT a git dependency.
+
+### Correct Configuration (DO NOT CHANGE):
+
+```toml
+[build]
+external-modules = ["netcdf"]
+link = ["netcdff"]
+
+[dependencies]
+fortran-s3-accessor = { git = "...", tag = "vX.Y.Z" }
+stdlib = "*"
+
+# Note: NetCDF Fortran uses system-installed library (linked via [build] section above)
+```
+
+### FORBIDDEN Configuration (NEVER USE):
+
+```toml
+# ❌ NEVER DO THIS ❌
+[dependencies]
+netcdf-fortran = { git = "https://github.com/LKedward/netcdf-interfaces.git" }
+netcdf-interfaces = { git = "https://github.com/LKedward/netcdf-interfaces.git" }
+```
+
+**Why:** The git-based netcdf wrappers require `-fallow-argument-mismatch` flags, have type mismatch issues, are fragile across compiler versions, and cause build failures. The system-installed approach is stable, tested, and works reliably.
+
+**If you are ever tempted to change this:** DON'T. Just use the system NetCDF library.
+
 ## Project Overview
 
 NetCDF integration for `fortran-s3-accessor` - provides transparent S3 URIs with automatic cleanup and optimal temp file management. This is a Fortran package built with FPM that enables direct opening of NetCDF files from S3 URIs using `s3_nf90_open()` as a drop-in replacement for `nf90_open()`.
@@ -25,8 +58,82 @@ fpm build --profile release
 
 ### Dependencies
 
-- **fortran-s3-accessor**: Uses git dependency `{ git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.0" }`
-- **netcdf-fortran**: Uses LKedward's interface wrapper `{ git = "https://github.com/LKedward/netcdf-interfaces.git" }`
+- **fortran-s3-accessor**: Uses git dependency `{ git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.1" }`
+- **stdlib**: Fortran standard library (metapackage in FPM 0.9.0+)
+- **netcdf-fortran**: Uses system-installed library (see critical note above)
+
+## Running Tests
+
+**IMPORTANT**: Always use the provided helper script or slash command to run tests. This ensures correct NetCDF paths are configured.
+
+### Option 1: Helper Script (Recommended for all users)
+
+```bash
+./scripts/run_tests.sh
+```
+
+The script automatically:
+- Detects NetCDF installation via `nf-config`
+- Sets correct include paths (`-I`)
+- Sets correct library paths (`-L`)
+- Works on macOS (Homebrew) and Linux
+
+**Examples:**
+```bash
+./scripts/run_tests.sh                # Run all tests
+./scripts/run_tests.sh --verbose      # Verbose output
+./scripts/run_tests.sh cache          # Run only cache tests
+```
+
+### Option 2: Claude Code Slash Command
+
+If using Claude Code, use the slash command:
+
+```
+/test-fortran
+/test-fortran --verbose
+/test-fortran cache
+```
+
+### Option 3: Manual FPM (Not Recommended)
+
+If you need to run tests manually, use:
+
+```bash
+fpm test --flag "-I$(nf-config --includedir) -L/opt/homebrew/lib"
+```
+
+**Note**: On Linux, replace `/opt/homebrew/lib` with `/usr/lib` or `/usr/lib/x86_64-linux-gnu`
+
+### Test Structure
+
+Tests are organized by functionality:
+- **test_temp_dir**: Temporary directory selection and verification
+- **test_error_codes**: NetCDF error code definitions
+- **test_helpers**: Utility functions (PID, string conversion)
+- **test_cache**: Local caching layer (init, get, put, clear, config)
+
+## Performance Benchmarking
+
+A comprehensive benchmarking suite is available to measure and track performance:
+
+```bash
+# Run benchmarks (requires MinIO setup with test fixtures)
+fpm run benchmark --flag "-I$(nf-config --includedir) -L/opt/homebrew/lib"
+```
+
+**Benchmarks measured:**
+- Small file access (~30KB) - cold cache and warm cache
+- Medium file access (~50KB) - cold cache and warm cache
+- Multiple file handles (20 concurrent) - stress test
+- Cache hit speedup comparison
+
+**Outputs markdown table format:**
+- Time to open (milliseconds)
+- Cache speedup (warm vs cold)
+- Multi-handle performance
+
+The benchmark suite runs automatically in CI on pull requests and tracks performance regressions over time.
 
 ## Architecture
 
@@ -87,18 +194,23 @@ Uses `get_pid()` subroutine to generate unique temp filenames:
 
 ### Performance Characteristics
 
-With fortran-s3-accessor v1.1.0:
+With fortran-s3-accessor v1.1.1:
 - **Network → Memory**: Direct streaming via POSIX popen (no disk I/O during download)
 - **Memory → Temp**: Single write to RAM disk (Linux) or /tmp
 - **Overhead**: ~10ms for small files, ~10-30% for large files vs direct S3 access
 
 ### Error Handling
 
+The module provides enhanced error messages with context and diagnostics:
+
+**Verbose mode:** Set `S3_NETCDF_VERBOSE` environment variable to enable detailed logging
+**Color output:** Automatic ANSI color codes in terminals (disable with `NO_COLOR=1`)
+
 Returns standard NetCDF error codes:
-- `NF90_EINVAL` - S3 download failed or invalid URI
+- `NF90_EINVAL` - Invalid S3 URI or download failed (with detailed error context)
 - `NF90_EMAXNAME` - Too many open handles (>100)
-- `NF90_EPERM` - Cannot create or write temp file (permission denied)
-- All other `nf90_*` errors pass through from NetCDF library
+- `NF90_EPERM` - Cannot create or write temp file (with path and diagnostics)
+- All other `nf90_*` errors pass through from NetCDF library (with context)
 
 ## Critical Usage Rules
 
@@ -124,7 +236,7 @@ status = s3_nf90_close(ncid)  ! Cleanup happens here
 
 **Completed migration**:
 - ✅ Moved to standalone repository
-- ✅ Git dependency on fortran-s3-accessor v1.1.0
+- ✅ Git dependency on fortran-s3-accessor v1.1.1 (path-style S3 support)
 - ✅ Issue templates and PR template
 - ✅ Project milestones (v0.1.0, v0.2.0, v1.0.0)
 - ✅ Comprehensive issue tracking for all planned features
@@ -132,8 +244,9 @@ status = s3_nf90_close(ncid)  ! Cleanup happens here
 
 ## Related Work
 
-**Parent library**: [fortran-s3-accessor](https://github.com/pgierz/fortran-s3-accessor) v1.1.0
+**Parent library**: [fortran-s3-accessor](https://github.com/pgierz/fortran-s3-accessor) v1.1.1
 - Provides generic S3 GET/PUT operations with direct memory streaming
+- Path-style S3 URL support (critical for MinIO and some S3-compatible services)
 - Comprehensive logging via `s3_logger` module
 - Platform support: Linux/macOS (native streaming), Windows (temp file fallback)
 

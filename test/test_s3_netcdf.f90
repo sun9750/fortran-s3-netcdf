@@ -4,6 +4,7 @@ program test_s3_netcdf
     use test_temp_dir, only : collect_temp_dir_tests
     use test_error_codes, only : collect_error_code_tests
     use test_helpers, only : collect_helper_tests
+    use test_cache, only : collect_cache_tests
     implicit none
     integer :: stat, is
     type(testsuite_type), allocatable :: testsuites(:)
@@ -13,7 +14,8 @@ program test_s3_netcdf
     testsuites = [ &
         new_testsuite("temp_dir", collect_temp_dir_tests), &
         new_testsuite("error_codes", collect_error_code_tests), &
-        new_testsuite("helpers", collect_helper_tests) &
+        new_testsuite("helpers", collect_helper_tests), &
+        new_testsuite("cache", collect_cache_tests) &
     ]
 
     do is = 1, size(testsuites)

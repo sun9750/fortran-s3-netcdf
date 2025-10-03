@@ -9,9 +9,16 @@
       "Bash(git init:*)",
       "Bash(mkdir:*)",
       "Bash(gh repo create:*)",
-      "Bash(gh milestone create:*)"
+      "Bash(gh milestone create:*)",
+      "Bash(git commit:*)",
+      "Bash(gh milestone create:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ],
-    "deny": [],
+    "deny": [
+      "Bash(git add -A:*)"
+    ],
     "ask": []
   }
 }

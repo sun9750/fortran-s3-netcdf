@@ -19,7 +19,7 @@ link = ["netcdff"]
 
 [dependencies]
 # Core S3 library
-fortran-s3-accessor = { git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.0" }
+fortran-s3-accessor = { git = "https://github.com/pgierz/fortran-s3-accessor.git", tag = "v1.1.1" }
 
 # Fortran stdlib for string utilities (metapackage in FPM 0.9.0+)
 stdlib = "*"
@@ -33,6 +33,16 @@ test-drive = { git = "https://github.com/fortran-lang/test-drive.git" }
 name = "s3_netcdf_example"
 source-dir = "app"
 main = "s3_netcdf_example.f90"
+
+[[executable]]
+name = "test_minio_integration"
+source-dir = "app"
+main = "test_minio_integration.f90"
+
+[[executable]]
+name = "benchmark"
+source-dir = "app"
+main = "benchmark.f90"
 
 [install]
 library = true

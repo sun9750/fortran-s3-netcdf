@@ -31,3 +31,7 @@ test_output/
 /dev/shm/s3_netcdf_*
 /tmp/s3_netcdf_*
 /tmp/s3_pid.tmp
+
+# Local development
+tmp/
+mc
